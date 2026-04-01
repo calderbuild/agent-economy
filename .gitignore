@@ -7,3 +7,6 @@ data/
 .next/
 .playwright-mcp/
 *.png
+artifacts/
+cache/
+typechain-types/
