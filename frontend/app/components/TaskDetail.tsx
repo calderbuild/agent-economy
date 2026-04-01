@@ -1,31 +1,12 @@
 "use client";
 
-import { type Task } from "../hooks/useApi";
+import type { Task } from "../hooks/useApi";
 
-const statusConfig: Record<
-  string,
-  { label: string; color: string; bg: string }
-> = {
-  open: {
-    label: "Open",
-    color: "text-accent-blue",
-    bg: "bg-accent-blue/10 border-accent-blue/20",
-  },
-  in_progress: {
-    label: "In Progress",
-    color: "text-accent-yellow",
-    bg: "bg-accent-yellow/10 border-accent-yellow/20",
-  },
-  submitted: {
-    label: "Submitted",
-    color: "text-accent-purple",
-    bg: "bg-accent-purple/10 border-accent-purple/20",
-  },
-  completed: {
-    label: "Completed",
-    color: "text-accent-green",
-    bg: "bg-accent-green/10 border-accent-green/20",
-  },
+const statusMap: Record<string, { label: string; color: string }> = {
+  open: { label: "OPEN", color: "var(--info)" },
+  in_progress: { label: "RUNNING", color: "var(--warning)" },
+  submitted: { label: "REVIEW", color: "var(--accent)" },
+  completed: { label: "DONE", color: "var(--accent)" },
 };
 
 export default function TaskDetail({
@@ -39,134 +20,137 @@ export default function TaskDetail({
   onApprove: (id: string) => void;
   onReject: (id: string) => void;
 }) {
-  const status = statusConfig[task.status] ?? statusConfig.open;
+  const status = statusMap[task.status] || {
+    label: task.status,
+    color: "var(--text-dim)",
+  };
 
   return (
     <div
-      className="fixed inset-0 z-50 modal-overlay flex items-center justify-center p-4"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4"
+      style={{ background: "rgba(0,0,0,0.7)", backdropFilter: "blur(4px)" }}
       onClick={onClose}
     >
       <div
-        className="glass-card-strong w-full max-w-lg p-6 animate-slide-up"
+        className="w-full max-w-xl max-h-[80vh] overflow-y-auto rounded-lg p-5"
+        style={{
+          background: "var(--bg-panel)",
+          border: "1px solid var(--border-mid)",
+        }}
         onClick={(e) => e.stopPropagation()}
       >
+        {/* Header */}
         <div className="flex items-start justify-between mb-4">
-          <div className="flex-1 mr-4">
-            <h3 className="text-lg font-semibold text-white mb-1">
+          <div className="flex-1 pr-4">
+            <h3
+              className="text-base font-semibold mb-1"
+              style={{ color: "var(--text-primary)" }}
+            >
               {task.title}
             </h3>
-            <span
-              className={`inline-block text-xs font-medium px-2 py-0.5 rounded border ${status.bg} ${status.color}`}
-            >
-              {status.label}
-            </span>
+            <div className="flex items-center gap-2">
+              <span
+                className="badge text-[9px] font-mono"
+                style={{
+                  color: status.color,
+                  background: `color-mix(in srgb, ${status.color} 12%, transparent)`,
+                }}
+              >
+                {status.label}
+              </span>
+              <span
+                className="text-xs font-mono tabular-nums"
+                style={{ color: "var(--accent)" }}
+              >
+                ${task.bounty_usdt.toFixed(2)} USDT
+              </span>
+            </div>
           </div>
           <button
             onClick={onClose}
-            className="text-slate-400 hover:text-white transition-colors p-1"
+            className="text-sm font-mono px-2 py-1 rounded transition-colors"
+            style={{ color: "var(--text-dim)" }}
           >
-            <svg
-              width={20}
-              height={20}
-              className="w-5 h-5"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              strokeWidth={2}
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M6 18L18 6M6 6l12 12"
-              />
-            </svg>
+            ESC
           </button>
         </div>
 
-        <div className="space-y-4 text-sm">
-          <div>
-            <label className="text-slate-500 text-xs uppercase tracking-wider">
-              Description
-            </label>
-            <p className="text-slate-300 mt-1 leading-relaxed">
-              {task.description}
-            </p>
+        {/* Description */}
+        <div className="mb-4">
+          <div
+            className="text-[10px] font-semibold tracking-widest uppercase mb-1"
+            style={{ color: "var(--text-dim)" }}
+          >
+            Description
           </div>
-
-          <div className="flex gap-6">
-            <div>
-              <label className="text-slate-500 text-xs uppercase tracking-wider">
-                Bounty
-              </label>
-              <p className="text-accent-green font-semibold mt-1">
-                ${task.bounty_usdt.toFixed(2)}{" "}
-                <span className="text-slate-500 font-normal text-xs">USDT</span>
-              </p>
-            </div>
-            <div>
-              <label className="text-slate-500 text-xs uppercase tracking-wider">
-                Created
-              </label>
-              <p className="text-slate-300 mt-1">
-                {new Date(task.created_at).toLocaleString()}
-              </p>
-            </div>
-          </div>
-
-          {task.required_capabilities?.length > 0 && (
-            <div>
-              <label className="text-slate-500 text-xs uppercase tracking-wider">
-                Capabilities
-              </label>
-              <div className="flex flex-wrap gap-1.5 mt-1.5">
-                {task.required_capabilities.map((cap) => (
-                  <span
-                    key={cap}
-                    className="text-xs px-2 py-0.5 rounded bg-surface-700 text-slate-400 border border-surface-600"
-                  >
-                    {cap}
-                  </span>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {task.agent_address && (
-            <div>
-              <label className="text-slate-500 text-xs uppercase tracking-wider">
-                Agent
-              </label>
-              <p className="text-slate-300 mt-1 font-mono text-xs">
-                {task.agent_address}
-              </p>
-            </div>
-          )}
-
-          {task.result && (
-            <div>
-              <label className="text-slate-500 text-xs uppercase tracking-wider">
-                Result
-              </label>
-              <div className="mt-1.5 p-3 rounded-lg bg-surface-900/80 border border-surface-600 max-h-48 overflow-y-auto">
-                <pre className="text-slate-300 text-xs whitespace-pre-wrap leading-relaxed font-mono">
-                  {task.result}
-                </pre>
-              </div>
-            </div>
-          )}
+          <p
+            className="text-sm leading-relaxed"
+            style={{ color: "var(--text-secondary)" }}
+          >
+            {task.description}
+          </p>
         </div>
 
+        {/* Agent */}
+        {task.agent_address && (
+          <div className="mb-4">
+            <div
+              className="text-[10px] font-semibold tracking-widest uppercase mb-1"
+              style={{ color: "var(--text-dim)" }}
+            >
+              Agent
+            </div>
+            <span
+              className="text-xs font-mono"
+              style={{ color: "var(--text-secondary)" }}
+            >
+              {task.agent_address}
+            </span>
+          </div>
+        )}
+
+        {/* Result */}
+        {task.result && (
+          <div className="mb-4">
+            <div
+              className="text-[10px] font-semibold tracking-widest uppercase mb-1"
+              style={{ color: "var(--text-dim)" }}
+            >
+              Result
+            </div>
+            <pre
+              className="text-xs leading-relaxed whitespace-pre-wrap rounded p-3 overflow-x-auto font-mono"
+              style={{
+                background: "var(--bg-raised)",
+                color: "var(--text-secondary)",
+                border: "1px solid var(--border-dim)",
+              }}
+            >
+              {task.result}
+            </pre>
+          </div>
+        )}
+
+        {/* Actions */}
         {task.status === "submitted" && (
-          <div className="flex gap-3 mt-6 pt-4 border-t border-white/5">
+          <div
+            className="flex gap-2 pt-2 border-t"
+            style={{ borderColor: "var(--border-dim)" }}
+          >
             <button
               onClick={() => onApprove(task.id)}
-              className="flex-1 px-4 py-2.5 rounded-lg bg-accent-green/15 text-accent-green border border-accent-green/20 font-medium text-sm hover:bg-accent-green/25 transition-all duration-200"
+              className="px-4 py-2 rounded text-xs font-semibold uppercase tracking-wider transition-opacity hover:opacity-80"
+              style={{ background: "var(--accent)", color: "var(--bg-base)" }}
             >
-              Approve
+              Approve and Pay
             </button>
             <button
               onClick={() => onReject(task.id)}
-              className="flex-1 px-4 py-2.5 rounded-lg bg-accent-red/15 text-accent-red border border-accent-red/20 font-medium text-sm hover:bg-accent-red/25 transition-all duration-200"
+              className="px-4 py-2 rounded text-xs font-semibold uppercase tracking-wider transition-opacity hover:opacity-80"
+              style={{
+                background: "var(--negative-dim)",
+                color: "var(--negative)",
+              }}
             >
               Reject
             </button>

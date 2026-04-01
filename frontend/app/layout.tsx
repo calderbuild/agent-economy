@@ -2,9 +2,8 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "AgentEconomy -- AI Agent Micro-Economy on Kite Chain",
-  description:
-    "Real-time dashboard for the AI agent micro-economy powered by Kite blockchain and x402 payments",
+  title: "AgentEconomy",
+  description: "AI Agent Micro-Economy on Kite Chain",
 };
 
 export default function RootLayout({
@@ -13,10 +12,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className="dark">
-      <body className="min-h-screen bg-surface-900 bg-grid antialiased">
-        {children}
-      </body>
+    <html lang="en">
+      <body className="min-h-screen ambient-glow">{children}</body>
     </html>
   );
 }

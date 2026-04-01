@@ -10,82 +10,102 @@ export default function Home() {
   const connected = useBackendHealth();
 
   return (
-    <div className="min-h-screen flex flex-col">
-      {/* Top bar */}
-      <header className="sticky top-0 z-40 glass-card-strong border-b border-white/5 rounded-none">
-        <div className="max-w-[1440px] mx-auto px-6 py-3 flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <div className="flex items-center gap-2.5">
-              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-accent-blue to-accent-purple flex items-center justify-center text-white text-sm font-bold">
-                AE
+    <div className="min-h-screen flex flex-col relative z-10">
+      {/* Command bar */}
+      <header
+        className="sticky top-0 z-40 border-b"
+        style={{
+          background: "var(--bg-panel)",
+          borderColor: "var(--border-dim)",
+        }}
+      >
+        <div className="max-w-[1400px] mx-auto px-5 h-12 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2">
+              <div className="w-6 h-6 rounded bg-accent/20 flex items-center justify-center">
+                <div className="w-2 h-2 rounded-sm bg-accent" />
               </div>
-              <h1 className="text-lg font-bold text-white tracking-tight">
+              <span
+                className="text-sm font-semibold tracking-tight"
+                style={{ color: "var(--text-primary)" }}
+              >
                 AgentEconomy
-              </h1>
-            </div>
-            <div className="hidden sm:flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-surface-700/60 border border-surface-600/50">
-              <span className="w-2 h-2 rounded-full bg-accent-purple/70" />
-              <span className="text-[11px] text-slate-400 font-medium">
-                Powered by Kite Chain
               </span>
             </div>
+            <span
+              className="text-xs font-mono"
+              style={{ color: "var(--text-dim)" }}
+            >
+              Kite Testnet
+            </span>
           </div>
 
-          <div className="flex items-center gap-3">
-            <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-surface-700/40">
-              <span
-                className={`w-2 h-2 rounded-full ${
-                  connected ? "bg-accent-green status-dot" : "bg-accent-red"
-                }`}
+          <div className="flex items-center gap-4">
+            <div className="flex items-center gap-1.5">
+              <div
+                className={`w-1.5 h-1.5 rounded-full ${connected ? "bg-accent pulse-dot" : "bg-negative"}`}
               />
-              <span className="text-xs text-slate-400">
-                {connected ? "Backend Connected" : "Disconnected"}
+              <span
+                className="text-xs font-mono"
+                style={{
+                  color: connected ? "var(--accent)" : "var(--negative)",
+                }}
+              >
+                {connected ? "LIVE" : "OFFLINE"}
               </span>
             </div>
+            <a
+              href="https://testnet.kitescan.ai"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-xs font-mono hover:underline transition-colors"
+              style={{ color: "var(--text-dim)" }}
+            >
+              kitescan
+            </a>
           </div>
         </div>
       </header>
 
       {/* Content */}
-      <main className="flex-1 max-w-[1440px] mx-auto w-full px-6 py-6 space-y-6">
-        {/* Metrics */}
-        <section>
-          <MetricsRow />
-        </section>
+      <main className="flex-1 max-w-[1400px] mx-auto w-full px-5 py-5 space-y-4">
+        {/* Metrics strip */}
+        <MetricsRow />
 
-        {/* Main content: Tasks + Activity */}
-        <section
-          className="grid grid-cols-1 lg:grid-cols-5 gap-6"
-          style={{ minHeight: "500px" }}
+        {/* Workspace: Tasks + Activity */}
+        <div
+          className="grid grid-cols-1 lg:grid-cols-3 gap-4"
+          style={{ minHeight: "480px" }}
         >
-          <div className="lg:col-span-3 glass-card-strong p-5">
+          <section className="lg:col-span-2 panel p-4">
             <TaskBoard />
-          </div>
-          <div className="lg:col-span-2 glass-card-strong p-5">
+          </section>
+          <section className="panel p-4 overflow-hidden">
             <ActivityFeed />
-          </div>
-        </section>
+          </section>
+        </div>
 
-        {/* Transaction log */}
-        <section>
+        {/* Transaction ledger */}
+        <section className="panel p-4">
           <TransactionLog />
         </section>
       </main>
 
       {/* Footer */}
-      <footer className="border-t border-white/5 py-4">
-        <div className="max-w-[1440px] mx-auto px-6 flex items-center justify-between">
-          <span className="text-xs text-slate-600">
-            AgentEconomy -- AI Agent Micro-Economy Demo
+      <footer
+        className="border-t py-3"
+        style={{ borderColor: "var(--border-dim)" }}
+      >
+        <div className="max-w-[1400px] mx-auto px-5 flex items-center justify-between">
+          <span className="text-xs" style={{ color: "var(--text-dim)" }}>
+            x402 micropayments on Kite Chain
           </span>
-          <a
-            href="https://testnet.kitescan.ai"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-xs text-accent-blue/60 hover:text-accent-blue transition-colors"
+          <span
+            className="text-xs font-mono"
+            style={{ color: "var(--text-dim)" }}
           >
-            Kitescan Explorer
-          </a>
+            eip155:2368
+          </span>
         </div>
       </footer>
     </div>
