@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback, useRef } from "react";
 
-const API_BASE = "http://localhost:4021";
+const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4021";
 
 export interface Task {
   id: string;
@@ -49,7 +49,7 @@ export interface Transaction {
 
 async function apiFetch<T>(
   path: string,
-  options?: RequestInit,
+  options?: RequestInit
 ): Promise<T | null> {
   try {
     const res = await fetch(`${API_BASE}${path}`, {
