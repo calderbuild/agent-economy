@@ -1,0 +1,27 @@
+services:
+  - type: web
+    name: agent-economy-api
+    runtime: node
+    region: oregon
+    plan: free
+    buildCommand: npm install
+    startCommand: npx tsx src/server/index.ts
+    envVars:
+      - key: PORT
+        value: 4021
+      - key: PAYEE_ADDRESS
+        sync: false
+      - key: AGENT_PRIVATE_KEY
+        sync: false
+      - key: KITE_RPC_URL
+        value: https://rpc-testnet.gokite.ai/
+      - key: KITE_CHAIN_ID
+        value: 2368
+      - key: KITE_USDT_ADDRESS
+        value: 0x0fF5393387ad2f9f691FD6Fd28e07E3969e27e63
+      - key: FACILITATOR_URL
+        value: https://facilitator.pieverse.io
+      - key: ATTESTATION_CONTRACT_ADDRESS
+        sync: false
+      - key: ANTHROPIC_API_KEY
+        sync: false
