@@ -5,6 +5,7 @@ import { createPaymentMiddleware } from "./middleware/x402.js";
 import { toolRoutes, toolPaymentConfig } from "./routes/tools/index.js";
 import { taskRoutes } from "./routes/tasks.js";
 import "./db/index.js";
+import { initAttestation } from "./services/attestation.js";
 
 const app = express();
 
@@ -86,6 +87,9 @@ app.get("/tools/discover", (_req, res) => {
     ],
   });
 });
+
+// Initialize attestation service
+initAttestation();
 
 app.listen(config.port, () => {
   console.log(`AgentEconomy server running on http://localhost:${config.port}`);

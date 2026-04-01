@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { v4 as uuid } from "uuid";
 import { db } from "../db/index.js";
+import { logAttestation } from "../services/attestation.js";
 
 export const taskRoutes = Router();
 
@@ -15,11 +16,9 @@ taskRoutes.post("/", (req, res) => {
   } = req.body;
 
   if (!title || !description || !bounty_usdt) {
-    res
-      .status(400)
-      .json({
-        error: "Missing required fields: title, description, bounty_usdt",
-      });
+    res.status(400).json({
+      error: "Missing required fields: title, description, bounty_usdt",
+    });
     return;
   }
 
@@ -28,14 +27,14 @@ taskRoutes.post("/", (req, res) => {
     `
     INSERT INTO tasks (id, title, description, bounty_usdt, required_capabilities, creator_address, status)
     VALUES (?, ?, ?, ?, ?, ?, 'open')
-  `,
+  `
   ).run(
     id,
     title,
     description,
     bounty_usdt,
     JSON.stringify(required_capabilities || []),
-    creator_address || null,
+    creator_address || null
   );
 
   logActivity(
@@ -43,7 +42,7 @@ taskRoutes.post("/", (req, res) => {
     "task_created",
     `New task: ${title} ($${bounty_usdt})`,
     id,
-    bounty_usdt,
+    bounty_usdt
   );
 
   const task = db.prepare("SELECT * FROM tasks WHERE id = ?").get(id);
@@ -100,14 +99,14 @@ taskRoutes.post("/:id/accept", (req, res) => {
     `
     UPDATE tasks SET status = 'in_progress', agent_address = ?, accepted_at = datetime('now')
     WHERE id = ?
-  `,
+  `
   ).run(agent_address, req.params.id);
 
   logActivity(
     agent_address,
     "task_accepted",
     `Accepted: ${task.title}`,
-    req.params.id,
+    req.params.id
   );
 
   const updated = db
@@ -144,14 +143,14 @@ taskRoutes.post("/:id/submit", (req, res) => {
     `
     UPDATE tasks SET status = 'submitted', result = ?, submitted_at = datetime('now')
     WHERE id = ?
-  `,
+  `
   ).run(result, req.params.id);
 
   logActivity(
     agent_address,
     "task_submitted",
     `Submitted result for: ${task.title}`,
-    req.params.id,
+    req.params.id
   );
 
   const updated = db
@@ -178,7 +177,7 @@ taskRoutes.post("/:id/approve", (req, res) => {
     `
     UPDATE tasks SET status = 'completed', completed_at = datetime('now')
     WHERE id = ?
-  `,
+  `
   ).run(req.params.id);
 
   // Record payment transaction
@@ -187,13 +186,13 @@ taskRoutes.post("/:id/approve", (req, res) => {
     `
     INSERT INTO transactions (id, task_id, type, from_address, to_address, amount_usdt, status)
     VALUES (?, ?, 'task_payment', ?, ?, ?, 'completed')
-  `,
+  `
   ).run(
     txId,
     req.params.id,
     task.creator_address,
     task.agent_address,
-    task.bounty_usdt,
+    task.bounty_usdt
   );
 
   logActivity(
@@ -201,7 +200,15 @@ taskRoutes.post("/:id/approve", (req, res) => {
     "payment_received",
     `Earned $${task.bounty_usdt} for: ${task.title}`,
     req.params.id,
+    task.bounty_usdt
+  );
+
+  // Log on-chain attestation (fire-and-forget)
+  logAttestation(
+    req.params.id,
+    task.agent_address,
     task.bounty_usdt,
+    "task_completed"
   );
 
   const updated = db
@@ -232,14 +239,14 @@ taskRoutes.post("/:id/reject", (req, res) => {
     UPDATE tasks SET status = 'open', agent_address = NULL, result = NULL,
     accepted_at = NULL, submitted_at = NULL
     WHERE id = ?
-  `,
+  `
   ).run(req.params.id);
 
   logActivity(
     task.agent_address,
     "task_rejected",
     `Result rejected for: ${task.title}`,
-    req.params.id,
+    req.params.id
   );
 
   const updated = db
@@ -278,21 +285,21 @@ taskRoutes.get("/api/metrics", (_req, res) => {
   const totalVolume = (
     db
       .prepare(
-        "SELECT COALESCE(SUM(amount_usdt), 0) as total FROM transactions",
+        "SELECT COALESCE(SUM(amount_usdt), 0) as total FROM transactions"
       )
       .get() as any
   ).total;
   const agentEarnings = (
     db
       .prepare(
-        "SELECT COALESCE(SUM(amount_usdt), 0) as total FROM transactions WHERE type = 'task_payment'",
+        "SELECT COALESCE(SUM(amount_usdt), 0) as total FROM transactions WHERE type = 'task_payment'"
       )
       .get() as any
   ).total;
   const agentSpending = (
     db
       .prepare(
-        "SELECT COALESCE(SUM(amount_usdt), 0) as total FROM transactions WHERE type = 'tool_purchase'",
+        "SELECT COALESCE(SUM(amount_usdt), 0) as total FROM transactions WHERE type = 'tool_purchase'"
       )
       .get() as any
   ).total;
@@ -313,19 +320,19 @@ function logActivity(
   action: string,
   detail: string,
   taskId?: string,
-  amount?: number,
+  amount?: number
 ) {
   db.prepare(
     `
     INSERT INTO agent_activity (agent_address, action, detail, task_id, amount_usdt)
     VALUES (?, ?, ?, ?, ?)
-  `,
+  `
   ).run(
     agentAddress || "system",
     action,
     detail,
     taskId || null,
-    amount || null,
+    amount || null
   );
 }
 
@@ -338,14 +345,14 @@ taskRoutes.post("/api/transactions/tool-purchase", (req, res) => {
     `
     INSERT INTO transactions (id, task_id, type, from_address, to_address, amount_usdt, tool_id, tx_hash, status)
     VALUES (?, ?, 'tool_purchase', ?, 'platform', ?, ?, ?, 'completed')
-  `,
+  `
   ).run(
     txId,
     task_id || null,
     agent_address,
     amount_usdt,
     tool_id,
-    tx_hash || null,
+    tx_hash || null
   );
 
   logActivity(
@@ -353,7 +360,15 @@ taskRoutes.post("/api/transactions/tool-purchase", (req, res) => {
     "tool_purchased",
     `Bought ${tool_id} for $${amount_usdt}`,
     task_id,
+    amount_usdt
+  );
+
+  // Log on-chain attestation (fire-and-forget)
+  logAttestation(
+    task_id || "unknown",
+    agent_address,
     amount_usdt,
+    "tool_purchased"
   );
 
   res.status(201).json({ id: txId });
