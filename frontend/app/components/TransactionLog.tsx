@@ -18,7 +18,7 @@ function formatTime(dateStr: string) {
 
 export default function TransactionLog() {
   const { data: txData, loading } = usePolling<{ transactions: Transaction[] }>(
-    "/tasks/api/transactions",
+    "/tasks/api/transactions"
   );
   const transactions = txData?.transactions;
 
@@ -133,12 +133,24 @@ export default function TransactionLog() {
                     </span>
                   </td>
                   <td className="py-2.5">
-                    <span
-                      className="text-[10px] font-mono tabular-nums"
-                      style={{ color: "var(--text-dim)" }}
-                    >
-                      {formatTime(tx.created_at)}
-                    </span>
+                    {tx.tx_hash ? (
+                      <a
+                        href={`https://testnet.kitescan.ai/tx/${tx.tx_hash}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-[10px] font-mono tabular-nums hover:underline"
+                        style={{ color: "var(--accent)" }}
+                      >
+                        {formatTime(tx.created_at)}
+                      </a>
+                    ) : (
+                      <span
+                        className="text-[10px] font-mono tabular-nums"
+                        style={{ color: "var(--text-dim)" }}
+                      >
+                        {formatTime(tx.created_at)}
+                      </span>
+                    )}
                   </td>
                 </tr>
               );

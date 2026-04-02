@@ -12,13 +12,16 @@
  * 8. Receives payment
  */
 import "dotenv/config";
+import { ethers } from "ethers";
 import { config } from "../shared/config.js";
 import { planTask } from "./planner.js";
 import { callTool } from "./tool-caller.js";
 import { synthesizeResult } from "./synthesizer.js";
 
 const SERVER_URL = `http://localhost:${config.port}`;
-const AGENT_ADDRESS = "0xAgent_" + config.agentPrivateKey.slice(2, 10);
+const AGENT_ADDRESS = config.agentPrivateKey
+  ? new ethers.Wallet(config.agentPrivateKey).address
+  : "0x0000000000000000000000000000000000000000";
 const POLL_INTERVAL_MS = 5000;
 
 interface Task {
@@ -145,7 +148,9 @@ async function pollAndExecute() {
   const profit = task.bounty_usdt - totalSpent;
   console.log("[Agent] Result submitted successfully!");
   console.log(
-    `[Agent] Economics: Earned $${task.bounty_usdt}, Spent $${totalSpent.toFixed(2)}, Profit $${profit.toFixed(2)}`,
+    `[Agent] Economics: Earned $${
+      task.bounty_usdt
+    }, Spent $${totalSpent.toFixed(2)}, Profit $${profit.toFixed(2)}`
   );
 }
 
