@@ -6,9 +6,15 @@ services:
     plan: free
     buildCommand: npm install
     startCommand: npx tsx src/server/index.ts
+    disk:
+      name: agent-economy-data
+      mountPath: /data
+      sizeGB: 1
     envVars:
       - key: PORT
         value: 4021
+      - key: DB_PATH
+        value: /data/agent-economy.db
       - key: PAYEE_ADDRESS
         sync: false
       - key: AGENT_PRIVATE_KEY
