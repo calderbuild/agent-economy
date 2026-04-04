@@ -55,14 +55,28 @@ export async function callTool(
       // Try x402 payment first
       if (x402Fetch) {
         console.log(`  [ToolCaller] Calling ${tool.id} with x402 payment...`);
-        const res = await x402Fetch(url.toString());
-        if (res.ok) {
-          console.log(`  [ToolCaller] x402 payment successful for ${tool.id}`);
-          return res.json();
+        try {
+          const res = await x402Fetch(url.toString());
+          if (res.ok) {
+            console.log(
+              `  [ToolCaller] x402 payment successful for ${tool.id}`
+            );
+            return res.json();
+          }
+          const body = await res.text().catch(() => "");
+          console.log(
+            `  [ToolCaller] x402 response: ${res.status}, body: ${body.slice(
+              0,
+              300
+            )}`
+          );
+        } catch (x402Err) {
+          console.log(
+            `  [ToolCaller] x402 error for ${tool.id}: ${
+              (x402Err as Error).message
+            }`
+          );
         }
-        console.log(
-          `  [ToolCaller] x402 response: ${res.status}, falling back to mock`
-        );
       }
 
       // Direct call without payment (will get 402 from server)
