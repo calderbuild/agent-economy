@@ -203,13 +203,20 @@ taskRoutes.post("/:id/approve", (req, res) => {
     task.bounty_usdt
   );
 
-  // Log on-chain attestation (fire-and-forget)
+  // Log on-chain attestation and store tx_hash
   logAttestation(
     req.params.id,
     task.agent_address,
     task.bounty_usdt,
     "task_completed"
-  );
+  ).then((txHash) => {
+    if (txHash) {
+      db.prepare("UPDATE transactions SET tx_hash = ? WHERE id = ?").run(
+        txHash,
+        txId
+      );
+    }
+  });
 
   const updated = db
     .prepare("SELECT * FROM tasks WHERE id = ?")
@@ -363,13 +370,20 @@ taskRoutes.post("/api/transactions/tool-purchase", (req, res) => {
     amount_usdt
   );
 
-  // Log on-chain attestation (fire-and-forget)
+  // Log on-chain attestation and store tx_hash
   logAttestation(
     task_id || "unknown",
     agent_address,
     amount_usdt,
     "tool_purchased"
-  );
+  ).then((txHash) => {
+    if (txHash) {
+      db.prepare("UPDATE transactions SET tx_hash = ? WHERE id = ?").run(
+        txHash,
+        txId
+      );
+    }
+  });
 
   res.status(201).json({ id: txId });
 });
