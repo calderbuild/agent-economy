@@ -62,7 +62,9 @@ function templateSynthesize(task: Task, results: ToolResult[]): string {
         sections.push(`- **Original (${data.from}):** ${data.originalText}`);
         sections.push(`- **Translated (${data.to}):** ${data.translatedText}`);
         sections.push(
-          `- **Confidence:** ${((data.confidence as number) * 100).toFixed(0)}%\n`,
+          `- **Confidence:** ${((data.confidence as number) * 100).toFixed(
+            0
+          )}%\n`
         );
         break;
 
@@ -100,33 +102,30 @@ function templateSynthesize(task: Task, results: ToolResult[]): string {
   return sections.join("\n");
 }
 
-async function claudeSynthesize(
+async function llmSynthesize(
   task: Task,
-  results: ToolResult[],
+  results: ToolResult[]
 ): Promise<string | null> {
-  if (!config.anthropicApiKey) return null;
+  const apiKey = config.openrouterApiKey || config.anthropicApiKey;
+  if (!apiKey) return null;
 
-  try {
-    const response = await fetch("https://api.anthropic.com/v1/messages", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "x-api-key": config.anthropicApiKey,
-        "anthropic-version": "2023-06-01",
-      },
-      body: JSON.stringify({
-        model: "claude-sonnet-4-20250514",
-        max_tokens: 2048,
-        messages: [
-          {
-            role: "user",
-            content: `You are an AI agent that just completed a task by calling paid tools. Synthesize the results into a clear, professional markdown report.
+  const useOpenRouter = !!config.openrouterApiKey;
+  const prompt = `You are an AI agent that just completed a task by calling paid tools. Synthesize the results into a clear, professional markdown report.
 
 Task: ${task.title}
 Description: ${task.description}
 
 Tool results:
-${results.map((r) => `### ${r.toolId} ($${r.cost.toFixed(2)})\n${JSON.stringify(r.data, null, 2)}`).join("\n\n")}
+${results
+  .map(
+    (r) =>
+      `### ${r.toolId} ($${r.cost.toFixed(2)})\n${JSON.stringify(
+        r.data,
+        null,
+        2
+      )}`
+  )
+  .join("\n\n")}
 
 Write a comprehensive report that:
 1. Has a clear title and executive summary
@@ -134,14 +133,50 @@ Write a comprehensive report that:
 3. Provides analysis and insights
 4. Ends with a cost summary showing each tool's cost and total
 
-Format as clean markdown. Be concise but thorough.`,
+Format as clean markdown. Be concise but thorough.`;
+
+  try {
+    if (useOpenRouter) {
+      const response = await fetch(
+        "https://openrouter.ai/api/v1/chat/completions",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${apiKey}`,
           },
-        ],
+          body: JSON.stringify({
+            model: "anthropic/claude-sonnet-4",
+            max_tokens: 2048,
+            messages: [{ role: "user", content: prompt }],
+          }),
+        }
+      );
+      if (!response.ok) {
+        console.log(`[Synthesizer] OpenRouter error: ${response.status}`);
+        return null;
+      }
+      const data = (await response.json()) as {
+        choices: Array<{ message: { content: string } }>;
+      };
+      return data.choices?.[0]?.message?.content || null;
+    }
+
+    // Anthropic direct
+    const response = await fetch("https://api.anthropic.com/v1/messages", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "x-api-key": apiKey,
+        "anthropic-version": "2023-06-01",
+      },
+      body: JSON.stringify({
+        model: "claude-sonnet-4-20250514",
+        max_tokens: 2048,
+        messages: [{ role: "user", content: prompt }],
       }),
     });
-
     if (!response.ok) return null;
-
     const data = (await response.json()) as {
       content: Array<{ type: string; text: string }>;
     };
@@ -153,12 +188,12 @@ Format as clean markdown. Be concise but thorough.`,
 
 export async function synthesizeResult(
   task: Task,
-  results: ToolResult[],
+  results: ToolResult[]
 ): Promise<string> {
-  const claudeResult = await claudeSynthesize(task, results);
-  if (claudeResult) {
-    console.log("[Synthesizer] Using Claude API synthesis");
-    return claudeResult;
+  const llmResult = await llmSynthesize(task, results);
+  if (llmResult) {
+    console.log("[Synthesizer] Using LLM synthesis");
+    return llmResult;
   }
 
   console.log("[Synthesizer] Using template-based synthesis");

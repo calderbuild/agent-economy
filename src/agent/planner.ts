@@ -147,31 +147,26 @@ function inferParams(tool: Tool, task: Task): Record<string, string> {
   return params;
 }
 
-async function claudePlan(task: Task, tools: Tool[]): Promise<TaskPlan | null> {
-  if (!config.anthropicApiKey) return null;
+async function llmPlan(task: Task, tools: Tool[]): Promise<TaskPlan | null> {
+  const apiKey = config.openrouterApiKey || config.anthropicApiKey;
+  if (!apiKey) return null;
 
-  try {
-    const response = await fetch("https://api.anthropic.com/v1/messages", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "x-api-key": config.anthropicApiKey,
-        "anthropic-version": "2023-06-01",
-      },
-      body: JSON.stringify({
-        model: "claude-sonnet-4-20250514",
-        max_tokens: 1024,
-        messages: [
-          {
-            role: "user",
-            content: `You are an AI agent planning how to complete a task. Given the task and available tools, output a JSON plan.
+  const useOpenRouter = !!config.openrouterApiKey;
+  const prompt = `You are an AI agent planning how to complete a task. Given the task and available tools, output a JSON plan.
 
 Task: ${task.title}
 Description: ${task.description}
 Required capabilities: ${task.required_capabilities}
 
 Available tools:
-${tools.map((t) => `- ${t.id}: ${t.description} (${t.price}, ${t.method}, params: ${JSON.stringify(t.params)})`).join("\n")}
+${tools
+  .map(
+    (t) =>
+      `- ${t.id}: ${t.description} (${t.price}, ${
+        t.method
+      }, params: ${JSON.stringify(t.params)})`
+  )
+  .join("\n")}
 
 Output ONLY valid JSON in this format (no markdown, no explanation):
 {
@@ -179,21 +174,59 @@ Output ONLY valid JSON in this format (no markdown, no explanation):
     {"toolId": "tool-id", "params": {"key": "value"}, "reason": "why this tool"}
   ],
   "reasoning": "overall approach"
-}`,
+}`;
+
+  try {
+    if (useOpenRouter) {
+      const response = await fetch(
+        "https://openrouter.ai/api/v1/chat/completions",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${apiKey}`,
           },
-        ],
+          body: JSON.stringify({
+            model: "anthropic/claude-sonnet-4",
+            max_tokens: 1024,
+            messages: [{ role: "user", content: prompt }],
+          }),
+        }
+      );
+      if (!response.ok) {
+        console.log(`[Planner] OpenRouter error: ${response.status}`);
+        return null;
+      }
+      const data = (await response.json()) as {
+        choices: Array<{ message: { content: string } }>;
+      };
+      const text = data.choices?.[0]?.message?.content || "";
+      const jsonMatch = text.match(/\{[\s\S]*\}/);
+      if (!jsonMatch) return null;
+      return JSON.parse(jsonMatch[0]) as TaskPlan;
+    }
+
+    // Anthropic direct
+    const response = await fetch("https://api.anthropic.com/v1/messages", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "x-api-key": apiKey,
+        "anthropic-version": "2023-06-01",
+      },
+      body: JSON.stringify({
+        model: "claude-sonnet-4-20250514",
+        max_tokens: 1024,
+        messages: [{ role: "user", content: prompt }],
       }),
     });
-
     if (!response.ok) return null;
-
     const data = (await response.json()) as {
       content: Array<{ type: string; text: string }>;
     };
     const text = data.content.find((c) => c.type === "text")?.text || "";
     const jsonMatch = text.match(/\{[\s\S]*\}/);
     if (!jsonMatch) return null;
-
     return JSON.parse(jsonMatch[0]) as TaskPlan;
   } catch {
     return null;
@@ -201,13 +234,12 @@ Output ONLY valid JSON in this format (no markdown, no explanation):
 }
 
 export async function planTask(task: Task, tools: Tool[]): Promise<TaskPlan> {
-  // Try Claude first, fall back to keyword matching
-  const claudeResult = await claudePlan(task, tools);
-  if (claudeResult) {
-    console.log("[Planner] Using Claude API plan");
-    return claudeResult;
+  const llmResult = await llmPlan(task, tools);
+  if (llmResult) {
+    console.log("[Planner] Using LLM plan");
+    return llmResult;
   }
 
-  console.log("[Planner] Using keyword-based plan (Claude API not available)");
+  console.log("[Planner] Using keyword-based plan (LLM not available)");
   return keywordPlan(task, tools);
 }

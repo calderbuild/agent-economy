@@ -12,6 +12,7 @@ export const config = {
   facilitatorUrl:
     process.env.FACILITATOR_URL || "https://facilitator.pieverse.io",
   anthropicApiKey: process.env.ANTHROPIC_API_KEY || "",
+  openrouterApiKey: process.env.OPENROUTER_API_KEY || "",
 };
 
 export const KITE_NETWORK = `eip155:${config.kiteChainId}` as const;
