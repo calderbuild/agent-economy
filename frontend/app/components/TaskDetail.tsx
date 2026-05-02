@@ -1,11 +1,12 @@
 "use client";
 
+import { useEffect } from "react";
 import type { Task } from "../hooks/useApi";
 
 const statusMap: Record<string, { label: string; color: string }> = {
   open: { label: "OPEN", color: "var(--info)" },
   in_progress: { label: "RUNNING", color: "var(--warning)" },
-  submitted: { label: "REVIEW", color: "var(--accent)" },
+  submitted: { label: "REVIEW", color: "var(--warning)" },
   completed: { label: "DONE", color: "var(--accent)" },
 };
 
@@ -25,8 +26,19 @@ export default function TaskDetail({
     color: "var(--text-dim)",
   };
 
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
+    document.addEventListener("keydown", handler);
+    return () => document.removeEventListener("keydown", handler);
+  }, [onClose]);
+
   return (
     <div
+      role="dialog"
+      aria-modal="true"
+      aria-label={task.title}
       className="fixed inset-0 z-50 flex items-center justify-center p-4"
       style={{ background: "rgba(0,0,0,0.7)", backdropFilter: "blur(4px)" }}
       onClick={onClose}

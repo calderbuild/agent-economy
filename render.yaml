@@ -31,3 +31,7 @@ services:
         sync: false
       - key: ANTHROPIC_API_KEY
         sync: false
+      - key: OPENROUTER_API_KEY
+        sync: false
+      - key: AGENT_SERVER_URL
+        value: https://agent-economy-api.onrender.com

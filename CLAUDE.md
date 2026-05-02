@@ -7,12 +7,16 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ```bash
 # Development (3 terminals)
 npm run dev:server                          # Backend on :4021
-cd frontend && npm run dev -- -p 3021       # Frontend on :3021
+cd frontend && npm run dev                  # Frontend on :3021
 npm run dev:agent                           # AI agent (polls tasks)
 
-# Build
+# Build / Lint
 npx tsc --noEmit                            # TypeScript check (backend)
 cd frontend && npx next build               # Frontend build check
+cd frontend && npm run lint                  # Next.js ESLint
+
+# Seed demo data (server must be running)
+npx tsx src/scripts/seed-demo.ts            # Populate tasks, transactions, activity
 
 # Smart contract
 npx hardhat compile                         # Compile Solidity
@@ -32,6 +36,10 @@ Three independent processes that communicate via HTTP:
 **Agent (Node.js subprocess)** -- Polls `/tasks?status=open` every 5s. Uses LLM (OpenRouter > Anthropic > keyword fallback) to plan which tools to call. Calls paid tool APIs with x402 fetch wrapper; falls back to mock data if payment fails. Synthesizes results via LLM or templates. Submits to `/tasks/:id/submit`.
 
 **Frontend (Next.js 14, port 3021)** -- Polls backend every 3s. Dark terminal-finance theme with JetBrains Mono (data) + DM Sans (UI). Components: MetricsRow, TaskBoard, ActivityFeed, TransactionLog, PostTaskForm, TaskDetail.
+
+## x402 Payment Flow
+
+Tool routes (`src/server/routes/tools/`) are wrapped by `createPaymentMiddleware` (`src/server/middleware/x402.ts`). The middleware intercepts requests, returns HTTP 402 with pricing if no payment header, then verifies payment via the Pieverse facilitator before forwarding to the handler. The agent (`src/agent/tool-caller.ts`) uses `@x402/fetch` to automatically handle 402 responses -- it reads the price, signs a payment with the agent wallet, and retries with the payment header. If payment fails (e.g., insufficient balance), the agent falls back to mock data and logs the failure. Successful payments are recorded as transactions in SQLite and optionally attested on-chain via `src/server/services/attestation.ts`.
 
 ## Key Gotchas
 
@@ -55,7 +63,7 @@ Frontend: `NEXT_PUBLIC_API_URL` -- Backend URL (default: `http://localhost:4021`
 
 ## Deployment
 
-- Frontend: Vercel (https://frontend-gilt-nu-30.vercel.app)
+- Frontend: Vercel (https://kite-agent-economy.vercel.app)
 - Backend: Render with persistent disk at `/data` (https://agent-economy-api.onrender.com)
 - Contract: `0x439Ea30758B27dc07B76EFB4dA9311A011B7554E` on Kite testnet (Chain ID 2368)
 
@@ -69,3 +77,6 @@ Frontend: `NEXT_PUBLIC_API_URL` -- Backend URL (default: `http://localhost:4021`
 | SVG 在 Next.js SSR 中只靠 Tailwind class 不显示尺寸 | SVG 必须加 `width`/`height` HTML 属性 |
 | usePolling 泛型与 API 返回形状不匹配 | API 返回 `{tasks: [...]}` 要用 `usePolling<{tasks: Task[]}>` 再解构 |
 | Faucet 有 reCAPTCHA | Playwright 无法自动完成验证码，需提示用户手动操作 |
+| 用 ffmpeg 录屏时 VS Code 抢占焦点，录到错误窗口 | 用 Claude in Chrome 扩展的 `gif_creator` 工具直接录制浏览器内容（不依赖窗口焦点），再用 ffmpeg 转 MP4 |
+| Render 免费实例休眠后前端显示 OFFLINE | 先 `curl https://agent-economy-api.onrender.com/health` 唤醒（约 6 秒冷启动），再操作 |
+| seed-demo.ts 默认只打本地 | 生产环境注入数据：`npx tsx src/scripts/seed-demo.ts https://agent-economy-api.onrender.com` |

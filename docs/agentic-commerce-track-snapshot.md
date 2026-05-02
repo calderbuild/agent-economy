@@ -1,0 +1,593 @@
+- generic:
+  - generic:
+    - list
+    - generic:
+      - navigation:
+        - generic:
+          - generic:
+            - link:
+              - /url: /
+              - img
+          - generic:
+            - link:
+              - /url: /programmes
+              - text: Programmes
+            - link:
+              - /url: /london-hub
+              - text: London Hub
+            - link:
+              - /url: /jobs
+              - text: Jobs
+            - link:
+              - /url: /partners
+              - text: Ecosystem
+            - link:
+              - /url: /my-dashboard
+              - img
+              - text: My Dashboard
+          - generic:
+            - generic:
+              - generic:
+                - img
+              - generic: Calder
+              - generic: participant
+      - main:
+        - generic:
+          - generic:
+            - generic:
+              - generic: Your browser does not support the video tag.
+          - generic:
+            - generic:
+              - generic:
+                - generic: Hackathon
+                - generic: Intermediate
+              - heading [level=1]: Kite AI Global Hackathon 2026
+              - paragraph: Welcome to the Kite AI Global Hackathon 2026 - Powering the Agentic Economy. Build and launch autonomous AI agents on the first AI Payments Blockchain.
+              - generic:
+                - generic:
+                  - img
+                  - generic: 27 March 2026
+                - generic:
+                  - img
+                  - generic: Online
+                - generic:
+                  - img
+                  - generic: 4 weeks
+              - generic:
+                - generic:
+                  - generic:
+                    - button: Registered
+                - link:
+                  - /url: /my-programmes/kites-hackathon-ai-agentic-economy
+                  - text: Open Programme
+                  - img
+        - generic:
+          - generic:
+            - generic:
+              - generic:
+                - generic:
+                  - heading [level=3]: "Agent-Native Infrastructure: From Intelligence to Execution"
+                  - paragraph: AI is no longer just answering questions — it's executing economic actions.
+                  - paragraph: The Kite AI Global Hackathon 2026 is a month-long sprint for developers building at that frontier. Autonomous agents that transact, settle, and operate on-chain. Real identity, real payments, real programmable constraints. Not demos — production-ready systems.
+                  - heading [level=3]:
+                    - strong: What You'll Build
+                  - paragraph: "Three tracks, one chain:"
+                  - list:
+                    - listitem:
+                      - strong: Agentic Commerce
+                      - text: — Agents that discover, pay, and manage — USDC via x402, subscription billing, API interactions with programmable constraints, all settled on Kite AI.
+                    - listitem:
+                      - strong: Agentic Trading
+                      - text: — Agents that analyse markets, execute trades, manage risk, and allocate capital. Yield optimisation, liquidation defence, cross-chain arbitrage — stablecoin-first.
+                    - listitem:
+                      - strong: Novel Track
+                      - text: — Anything that runs on Kite and does something nobody's seen before.
+                  - heading [level=3]:
+                    - strong: Who Should Join
+                  - paragraph: AI engineers, Web3 developers, DeFi builders, LLM/agent framework developers, and teams building payments or identity infrastructure. Starter kits, workshops, and documentation will be provided — but come ready to ship.
+                - generic:
+                  - generic:
+                    - generic:
+                      - generic:
+                        - generic:
+                          - img
+                      - generic: 3 Build Tracks — Agentic commerce, trading, and an open track for wild ideas
+                    - generic:
+                      - generic:
+                        - generic:
+                          - img
+                      - generic: 4-Week Build Period — Time to ship a working product, not a weekend hack
+                    - generic:
+                      - generic:
+                        - generic:
+                          - img
+                      - generic: Learn AI Agent Infrastructure — Workshops on building and deploying agents on Kite chain
+                  - generic:
+                    - generic:
+                      - generic:
+                        - generic:
+                          - img
+                      - generic: Mentorship & Dev Support — Technical guidance throughout the hackathon via Discord
+                    - generic:
+                      - generic:
+                        - generic:
+                          - img
+                      - generic: Ecosystem Exposure — Winners showcased at the finale and invited to demo their projects
+                    - generic:
+                      - generic:
+                        - generic:
+                          - img
+                      - generic: Top-Tier Judges — Leaders from Microsoft, Uber, Nvidia, Meta, Google DeepMind, and academia
+              - generic:
+                - generic:
+                  - generic:
+                    - generic:
+                      - generic:
+                        - img
+                    - generic:
+                      - generic:
+                        - img
+                    - generic:
+                      - generic:
+                        - img
+                    - generic:
+                      - generic:
+                        - img
+                    - generic:
+                      - generic:
+                        - img
+                    - generic:
+                      - generic:
+                        - img
+        - generic:
+          - generic:
+            - heading [level=2]:
+              - generic: Prizes & Challenges
+            - generic:
+              - generic:
+                - generic:
+                  - generic:
+                    - generic:
+                      - generic:
+                        - generic:
+                          - heading [level=3]: Hackathon Focus
+                    - generic:
+                      - generic:
+                        - generic:
+                          - generic:
+                            - text: Prize Pool
+                            - generic: ($10,000)
+                          - generic: There is a $10,000 prize pool in the Kite AI Hackathon split across top teams
+                  - generic:
+                    - generic:
+                      - generic:
+                        - heading [level=2]:
+                          - strong: Build autonomous AI agents that operate and settle on Kite — the first AI payment blockchain.
+                        - paragraph: Kite AI is purpose-built infrastructure for autonomous agents to transact with identity, payment, governance, and verification. You're building agents that perform real tasks and settle on-chain.
+                        - heading [level=3]:
+                          - strong: "Requirements:"
+                        - list:
+                          - listitem: Shows an AI agent that performs a task and settles on Kite chain
+                          - listitem: Executes paid actions (API calls, services, transactions)
+                          - listitem: Works end-to-end in a live demo in production (Vercel/AWS)
+                          - listitem: Uses Kite chain for attestations (proof, auditability)
+                          - listitem: "Functional UI required: web app or CLI tool"
+                          - listitem: Demo must be publicly accessible or reproducible via README
+                        - heading [level=3]:
+                          - strong: "Judging Criteria:"
+                        - list:
+                          - listitem: Agent Autonomy — minimal human involvement
+                          - listitem: Developer Experience — clear docs, README/video, simple UX
+                          - listitem: Real-World Applicability — solves a real problem, runs in production
+                          - listitem: Novel/Creativity — integration with AI tools, agentic workflows
+                        - heading [level=3]:
+                          - strong: "Prizes:"
+                        - paragraph:
+                          - strong: "1st:"
+                          - text: 1x $5,000
+                        - paragraph:
+                          - strong: "2nd:"
+                          - text: 2 x $1,500 each
+                        - paragraph:
+                          - strong: "3rd:"
+                          - text: 2 x $1,000 each
+                        - paragraph:
+                          - emphasis: Sponsors have a right to adjust (including increase, decrease or redistribute) prize structure depending on submission quality and requirements being met.
+                        - heading [level=2]: Choose your track below ↓
+                    - generic:
+                      - heading [level=4]: Resources & Attachments
+                      - generic:
+                        - link:
+                          - /url: https://docs.gokite.ai
+                          - img
+                          - generic: Docs
+                          - img
+                        - link:
+                          - /url: https://docs.gokite.ai/kite-agent-passport/kite-agent-passport
+                          - img
+                          - generic: Agent Passport Demo
+                          - img
+                        - link:
+                          - /url: https://docs.gokite.ai/kite-chain/account-abstraction-sdk
+                          - img
+                          - generic: AA SDK
+                          - img
+                        - link:
+                          - /url: https://docs.gokite.ai/kite-chain/4-building-dapps/counter-dapp
+                          - img
+                          - generic: Sample DApp
+                          - img
+                        - link:
+                          - /url: https://docs.gokite.ai/kite-chain/1-getting-started/network-information
+                          - img
+                          - generic: Kite Chain Network Getting Started
+                          - img
+                        - link:
+                          - /url: https://docs.gokite.ai/kite-chain/1-getting-started/tools
+                          - img
+                          - generic: Kite Getting Started Tools
+                          - img
+                        - link:
+                          - /url: https://docs.gokite.ai/kite-chain/9-gasless-integration
+                          - img
+                          - generic: Kite Gasless Implementation
+                          - img
+                        - link:
+                          - /url: https://docs.gokite.ai/kite-chain/10-layerzero-kite-integration
+                          - img
+                          - generic: Cross Chain (Layer Zero)
+                          - img
+                        - link:
+                          - /url: https://docs.gokite.ai/kite-chain/11-goldsky-kite-integration
+                          - img
+                          - generic: Indexer
+                          - img
+                        - link:
+                          - /url: https://docs.gokite.ai/kite-chain/12-lucid-kite-integration
+                          - img
+                          - generic: DeFi (Yield) Documentation
+                          - img
+                        - link:
+                          - /url: https://docs.gokite.ai/kite-chain/multisig-wallet
+                          - img
+                          - generic: Multi-sig
+                          - img
+            - separator
+            - generic:
+              - generic:
+                - generic:
+                  - generic:
+                    - generic:
+                      - generic:
+                        - img
+                      - heading [level=3]: Agentic Commerce
+                      - paragraph: "Build autonomous AI agents that discover products and services, execute USDC payments via x402, manage subscriptions and usage-based billing, and interact with APIs using programmable constraints. Focus: agent-to-API payments, stablecoin settlement, verifiable identity, and real-time execution on Kite AI."
+                    - generic:
+                      - button: View Details
+              - generic:
+                - generic:
+                  - generic:
+                    - generic:
+                      - generic:
+                        - img
+                      - heading [level=3]: Agentic Trading & Portfolio Management
+                      - paragraph: "Build autonomous trading agents that analyse markets, execute on-chain trades, manage risk dynamically, allocate capital across DeFi protocols, and perform cross-chain arbitrage. Focus: AI-native trading infrastructure, reputation-aware capital delegation, stablecoin-first settlement."
+                    - generic:
+                      - button: View Details
+              - generic:
+                - generic:
+                  - generic:
+                    - generic:
+                      - generic:
+                        - img
+                      - heading [level=3]: Novel Track
+                      - paragraph: Build anything unique that doesn't fit the first two tracks. New approaches, unexpected integrations, open applications. If it runs on Kite and does something nobody's seen before, it belongs here.
+                    - generic:
+                      - button: View Details
+        - generic:
+          - generic:
+            - generic:
+              - generic:
+                - heading [level=2]:
+                  - generic: Programme Schedule
+              - generic:
+                - combobox:
+                  - img
+                  - generic: Europe/London (Default)
+                  - img
+            - generic:
+              - generic:
+                - button:
+                  - generic: Week 1
+                  - generic: Kick-Off
+                - button:
+                  - generic: Week 2
+                  - generic: Mid-Hackathon
+                - button:
+                  - generic: Week 3
+                  - generic: Build!
+                - button:
+                  - generic: Week 4
+                  - generic: Submission Time
+            - generic:
+              - generic:
+                - generic:
+                  - generic:
+                    - generic: 31st March, 14:00 UTC
+                    - generic: (30 minutes)
+                  - generic:
+                    - generic:
+                      - heading [level=3]:
+                        - generic: Kick-off Event & Kite Overview
+              - generic:
+                - generic:
+                  - generic:
+                    - generic: 6th April, 23:59 UTC-12
+                  - generic:
+                    - generic:
+                      - heading [level=3]:
+                        - generic: "Milestone Deadline: Create Your Project, Add Your Team, Share Your Idea"
+                      - paragraph: Submit your project outline!
+        - generic:
+          - generic:
+            - generic:
+              - heading [level=2]:
+                - generic: Programme Guests
+            - generic:
+              - generic:
+                - generic:
+                  - generic:
+                    - img
+                  - heading [level=3]: Vik Pandey
+                  - paragraph: Head of Protocol @ Kite AI
+        - generic:
+          - generic:
+            - generic:
+              - heading [level=2]:
+                - generic: Partners
+            - generic:
+              - generic:
+                - generic:
+                  - link:
+                    - /url: https://gokite.ai/
+                    - generic:
+                      - generic:
+                        - generic:
+                          - img
+                      - generic:
+                        - paragraph: Kite AI is the first AI payment blockchain — purpose-built infrastructure for autonomous agents to transact with identity, payment, governance, and verification.
+              - generic:
+                - generic:
+                  - link:
+                    - /url: https://cloud.google.com/
+                    - generic:
+                      - generic:
+                        - generic:
+                          - img
+        - generic:
+          - generic:
+            - generic:
+              - heading [level=2]:
+                - generic: Workshops
+            - generic:
+              - generic:
+                - tablist:
+                  - tab [selected]: Upcoming
+                  - tab: Finished
+              - tabpanel:
+                - generic:
+                  - generic:
+                    - link:
+                      - /url: /programmes/kites-hackathon-ai-agentic-economy/events/finale-event
+                      - generic:
+                        - img
+                    - generic:
+                      - generic:
+                        - generic:
+                          - generic:
+                            - img
+                            - generic: May 6, 2026
+                          - generic:
+                            - img
+                            - text: Add to Calendar
+                        - generic:
+                          - generic: 11:00 PM GMT+8
+                          - generic: • 1 hour
+                      - generic:
+                        - link:
+                          - /url: /programmes/kites-hackathon-ai-agentic-economy/events/finale-event
+                          - text: View Event Details
+        - generic:
+          - generic:
+            - generic:
+              - heading [level=2]:
+                - generic: Frequently Asked Questions
+            - generic:
+              - generic:
+                - generic:
+                  - heading [level=3]:
+                    - button:
+                      - text: What is the Kite AI Global Hackathon 2026?
+                      - img
+                - generic:
+                  - heading [level=3]:
+                    - button:
+                      - text: What is Kite AI?
+                      - img
+                - generic:
+                  - heading [level=3]:
+                    - button:
+                      - text: When does the hackathon run?
+                      - img
+                - generic:
+                  - heading [level=3]:
+                    - button [expanded]:
+                      - text: What are the tracks?
+                      - img
+                  - region:
+                    - generic:
+                      - generic:
+                        - list:
+                          - listitem:
+                            - strong: Agentic Commerce
+                            - text: — Build agents that discover products, execute USDC payments via x402, manage subscriptions, and interact with APIs using programmable constraints.
+                          - listitem:
+                            - strong: Agentic Trading & Portfolio Management
+                            - text: — Build agents that analyse markets, execute on-chain trades, manage risk, and perform cross-chain arbitrage.
+                          - listitem:
+                            - strong: Novel Track
+                            - text: — Anything innovative that doesn't fit the first two tracks, as long as it runs on Kite.
+        - generic:
+          - generic:
+            - generic:
+              - heading [level=2]:
+                - generic: Related Programmes
+            - generic:
+              - generic:
+                - link:
+                  - /url: /programmes/concordium-educate
+                  - generic:
+                    - generic:
+                      - generic:
+                        - img
+                    - generic:
+                      - heading [level=3]: Identity on Chain Educate
+                      - generic:
+                        - generic: Educate
+                        - generic: Beginner
+                    - generic:
+                      - generic:
+                        - generic:
+                          - img
+                          - generic: Online
+                        - generic:
+                          - img
+                          - generic: 17 March 2026
+                        - generic:
+                          - img
+                          - generic: 7 weeks
+                    - generic:
+                      - generic: View Details
+              - generic:
+                - link:
+                  - /url: /programmes/shape-rotator-virtual-hackathon
+                  - generic:
+                    - generic:
+                      - generic:
+                        - img
+                    - generic:
+                      - heading [level=3]: Shape Rotator Virtual Hackathon
+                      - generic:
+                        - generic: Hackathon
+                        - generic: Advanced
+                    - generic:
+                      - generic:
+                        - generic:
+                          - img
+                          - generic: Online
+                        - generic:
+                          - img
+                          - generic: 09 March 2026
+                        - generic:
+                          - img
+                          - generic: 2 weeks
+                    - generic:
+                      - generic: View Details
+              - generic:
+                - link:
+                  - /url: /programmes/mezo-hackathon-building-bitcoins-future
+                  - generic:
+                    - generic:
+                      - generic:
+                        - img
+                    - generic:
+                      - heading [level=3]: "Mezo Hackathon: Building Bitcoin's Future"
+                      - generic:
+                        - generic: Hackathon
+                        - generic: Intermediate
+                    - generic:
+                      - generic:
+                        - generic:
+                          - img
+                          - generic: Online
+                        - generic:
+                          - img
+                          - generic: 12 April 2026
+                        - generic:
+                          - img
+                          - generic: 6 weeks
+                    - generic:
+                      - generic: View Details
+      - contentinfo:
+        - generic:
+          - generic:
+            - generic:
+              - generic:
+                - img
+              - paragraph: © 2026 Encode Club Education Limited. All rights reserved.
+              - link:
+                - /url: mailto:info@encode.club
+                - img
+                - text: info@encode.club
+              - button:
+                - img
+                - text: Partner with us
+            - generic:
+              - heading [level=3]: Pages
+              - link:
+                - /url: /programmes
+                - text: Programmes
+              - link:
+                - /url: /london-hub
+                - text: London Hub
+              - link:
+                - /url: /jobs
+                - text: Jobs
+              - link:
+                - /url: /alumni
+                - text: Alumni
+              - link:
+                - /url: /partners
+                - text: Ecosystem
+            - generic:
+              - heading [level=3]: Socials
+              - link:
+                - /url: https://www.linkedin.com/company/encode-club/
+                - img
+                - text: LinkedIn
+              - link:
+                - /url: https://twitter.com/encodeclub
+                - img
+                - text: X (Twitter)
+              - link:
+                - /url: https://discord.gg/BsPbaShcxv
+                - img
+                - text: Discord
+              - link:
+                - /url: https://www.blog.encode.club/
+                - img
+                - text: Blog
+            - generic:
+              - heading [level=3]: Legal
+              - link:
+                - /url: /privacy-policy
+                - text: Privacy Policy
+              - link:
+                - /url: /terms-of-service
+                - text: Terms of Service
+  - dialog [ref=e645]:
+    - generic [ref=e650]:
+      - generic [ref=e653]:
+        - heading "Agentic Commerce" [level=3] [ref=e655]
+        - generic [ref=e656]:
+          - img "Kite AI logo" [ref=e657]
+          - link "Supported by Kite AI" [ref=e658] [cursor=pointer]:
+            - /url: https://gokite.ai/
+      - generic [ref=e661]:
+        - paragraph [ref=e662]: Build autonomous AI agents that discover products and services, execute USDC payments via x402, manage subscriptions and usage-based billing, and interact with APIs using programmable constraints.
+        - paragraph [ref=e663]:
+          - strong [ref=e664]: "Focus:"
+          - text: agent-to-API payments, stablecoin settlement, verifiable identity, and real-time execution on Kite AI.
+    - button "Close" [active] [ref=e665] [cursor=pointer]:
+      - img [ref=e666]
+      - generic [ref=e669]: Close

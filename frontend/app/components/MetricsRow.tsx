@@ -12,21 +12,33 @@ function AnimatedNumber({
 }) {
   const [display, setDisplay] = useState(0);
   const prevRef = useRef(0);
+  const rafRef = useRef(0);
 
   useEffect(() => {
     const from = prevRef.current;
     const to = value;
     if (from === to) return;
+
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      setDisplay(to);
+      prevRef.current = to;
+      return;
+    }
+
     const duration = 600;
     const start = performance.now();
     const step = (now: number) => {
       const progress = Math.min((now - start) / duration, 1);
       const eased = 1 - Math.pow(1 - progress, 3);
       setDisplay(from + (to - from) * eased);
-      if (progress < 1) requestAnimationFrame(step);
-      else prevRef.current = to;
+      if (progress < 1) {
+        rafRef.current = requestAnimationFrame(step);
+      } else {
+        prevRef.current = to;
+      }
     };
-    requestAnimationFrame(step);
+    rafRef.current = requestAnimationFrame(step);
+    return () => cancelAnimationFrame(rafRef.current);
   }, [value]);
 
   return (

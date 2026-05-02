@@ -314,7 +314,11 @@ taskRoutes.get("/api/metrics", (_req, res) => {
   res.json({
     totalTasks,
     completedTasks,
-    openTasks: totalTasks - completedTasks,
+    openTasks: (
+      db
+        .prepare("SELECT COUNT(*) as count FROM tasks WHERE status = 'open'")
+        .get() as any
+    ).count,
     totalVolume,
     agentEarnings,
     agentSpending,

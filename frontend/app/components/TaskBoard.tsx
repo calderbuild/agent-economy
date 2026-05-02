@@ -13,7 +13,7 @@ import TaskDetail from "./TaskDetail";
 const statusMap: Record<string, { label: string; color: string }> = {
   open: { label: "OPEN", color: "var(--info)" },
   in_progress: { label: "RUNNING", color: "var(--warning)" },
-  submitted: { label: "REVIEW", color: "var(--accent)" },
+  submitted: { label: "REVIEW", color: "var(--warning)" },
   completed: { label: "DONE", color: "var(--accent)" },
 };
 
@@ -33,7 +33,7 @@ export default function TaskBoard() {
       setSelectedTask(null);
       refetch();
     },
-    [refetch],
+    [refetch]
   );
 
   const handleReject = useCallback(
@@ -42,11 +42,11 @@ export default function TaskBoard() {
       setSelectedTask(null);
       refetch();
     },
-    [refetch],
+    [refetch]
   );
 
   const filtered = tasks?.filter(
-    (t) => filter === "all" || t.status === filter,
+    (t) => filter === "all" || t.status === filter
   );
   const filters = ["all", "open", "in_progress", "submitted", "completed"];
 
@@ -86,8 +86,8 @@ export default function TaskBoard() {
             {f === "all"
               ? "All"
               : f === "in_progress"
-                ? "Active"
-                : f.charAt(0).toUpperCase() + f.slice(1)}
+              ? "Active"
+              : f.charAt(0).toUpperCase() + f.slice(1)}
           </button>
         ))}
       </div>

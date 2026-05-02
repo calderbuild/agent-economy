@@ -2,6 +2,9 @@ import "dotenv/config";
 
 export const config = {
   port: parseInt(process.env.PORT || "4021"),
+  get agentServerUrl() {
+    return process.env.AGENT_SERVER_URL || `http://localhost:${this.port}`;
+  },
   payeeAddress: process.env.PAYEE_ADDRESS || "",
   agentPrivateKey: process.env.AGENT_PRIVATE_KEY || "",
   kiteRpcUrl: process.env.KITE_RPC_URL || "https://rpc-testnet.gokite.ai/",

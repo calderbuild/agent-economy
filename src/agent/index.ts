@@ -18,7 +18,7 @@ import { planTask } from "./planner.js";
 import { callTool } from "./tool-caller.js";
 import { synthesizeResult } from "./synthesizer.js";
 
-const SERVER_URL = `http://localhost:${config.port}`;
+const SERVER_URL = config.agentServerUrl;
 const AGENT_ADDRESS = config.agentPrivateKey
   ? new ethers.Wallet(config.agentPrivateKey).address
   : "0x0000000000000000000000000000000000000000";

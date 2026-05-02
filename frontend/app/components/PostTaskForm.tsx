@@ -21,7 +21,7 @@ export default function PostTaskForm({ onCreated }: { onCreated: () => void }) {
 
   const toggle = (cap: string) =>
     setCaps((prev) =>
-      prev.includes(cap) ? prev.filter((c) => c !== cap) : [...prev, cap],
+      prev.includes(cap) ? prev.filter((c) => c !== cap) : [...prev, cap]
     );
 
   const handleSubmit = async () => {
@@ -32,7 +32,9 @@ export default function PostTaskForm({ onCreated }: { onCreated: () => void }) {
       description: description.trim(),
       bounty_usdt: parseFloat(bounty) || 1,
       required_capabilities: caps,
-      creator_address: "0xDashboardUser",
+      creator_address:
+        process.env.NEXT_PUBLIC_DEMO_CREATOR_ADDRESS ||
+        "0xDemoUser000000000000000000000000000000",
     });
     setTitle("");
     setDescription("");
@@ -126,7 +128,9 @@ export default function PostTaskForm({ onCreated }: { onCreated: () => void }) {
                 ? "var(--accent-dim)"
                 : "var(--bg-panel)",
               color: caps.includes(cap) ? "var(--accent)" : "var(--text-dim)",
-              border: `1px solid ${caps.includes(cap) ? "var(--accent)" : "var(--border-dim)"}`,
+              border: `1px solid ${
+                caps.includes(cap) ? "var(--accent)" : "var(--border-dim)"
+              }`,
             }}
           >
             {cap}

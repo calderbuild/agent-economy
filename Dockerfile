@@ -4,10 +4,13 @@ COPY package*.json ./
 RUN npm ci
 COPY tsconfig.json ./
 COPY src/ ./src/
+RUN npm run build
 
 FROM node:22-alpine
 WORKDIR /app
-COPY --from=builder /app ./
+COPY --from=builder /app/package*.json ./
+COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/dist ./dist
 EXPOSE 4021
 ENV PORT=4021
-CMD ["npx", "tsx", "src/server/index.ts"]
+CMD ["node", "dist/server/index.js"]

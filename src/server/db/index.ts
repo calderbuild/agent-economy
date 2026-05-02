@@ -59,4 +59,12 @@ db.exec(`
   );
 `);
 
+// Indexes for frequent query patterns (idempotent)
+db.exec(`
+  CREATE INDEX IF NOT EXISTS idx_tasks_status_created ON tasks(status, created_at DESC);
+  CREATE INDEX IF NOT EXISTS idx_tasks_created ON tasks(created_at DESC);
+  CREATE INDEX IF NOT EXISTS idx_transactions_created ON transactions(created_at DESC);
+  CREATE INDEX IF NOT EXISTS idx_activity_created ON agent_activity(created_at DESC);
+`);
+
 console.log("Database initialized at", DB_PATH);
