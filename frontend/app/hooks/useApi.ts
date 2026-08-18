@@ -100,7 +100,7 @@ export function useBackendHealth() {
   useEffect(() => {
     let mounted = true;
     const check = async () => {
-      const result = await apiFetch<{ status: string }>("/health");
+      const result = await apiFetch<Metrics>("/tasks/api/metrics");
       if (mounted) setConnected(result !== null);
     };
     check();
