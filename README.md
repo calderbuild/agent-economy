@@ -69,41 +69,52 @@ npx hardhat run scripts/deploy.ts --network kiteTestnet
 
 ## Kite Chain Integration
 
-| Component | Detail |
-|-----------|--------|
-| Chain | Kite Testnet (Chain ID 2368) |
-| RPC | https://rpc-testnet.gokite.ai/ |
-| Explorer | https://testnet.kitescan.ai/ |
-| Payment | x402 protocol via Pieverse facilitator |
-| Token | Test USDT (0x0fF5393387ad2f9f691FD6Fd28e07E3969e27e63) |
-| Attestation | Custom Solidity contract emitting Attestation events |
+| Component   | Detail                                                 |
+| ----------- | ------------------------------------------------------ |
+| Chain       | Kite Testnet (Chain ID 2368)                           |
+| RPC         | https://rpc-testnet.gokite.ai/                         |
+| Explorer    | https://testnet.kitescan.ai/                           |
+| Payment     | x402 protocol via Pieverse facilitator                 |
+| Token       | Test USDT (0x0fF5393387ad2f9f691FD6Fd28e07E3969e27e63) |
+| Attestation | Custom Solidity contract emitting Attestation events   |
 
 ## Tech Stack
 
-| Layer | Technology |
-|-------|-----------|
-| Backend | Node.js, Express, TypeScript |
-| Payment | @x402/express, @x402/fetch, @x402/evm |
-| Frontend | Next.js 14, Tailwind CSS |
-| Agent | Claude API (with keyword fallback) |
-| Database | SQLite (better-sqlite3) |
-| Smart Contract | Solidity 0.8.24, Hardhat |
-| Chain | Kite Testnet (Avalanche subnet) |
+| Layer          | Technology                            |
+| -------------- | ------------------------------------- |
+| Backend        | Node.js, Express, TypeScript          |
+| Payment        | @x402/express, @x402/fetch, @x402/evm |
+| Frontend       | Next.js 14, Tailwind CSS              |
+| Agent          | Claude API (with keyword fallback)    |
+| Database       | SQLite (better-sqlite3)               |
+| Smart Contract | Solidity 0.8.24, Hardhat              |
+| Chain          | Kite Testnet (Avalanche subnet)       |
 
 ## API Endpoints
 
-| Endpoint | Description |
-|----------|-------------|
-| `GET /health` | Health check |
-| `GET /tools/discover` | List available paid tools |
-| `GET /tasks` | List tasks |
-| `POST /tasks` | Create bounty task |
-| `POST /tasks/:id/accept` | Agent accepts task |
-| `POST /tasks/:id/submit` | Agent submits result |
-| `POST /tasks/:id/approve` | Approve and pay agent |
-| `GET /tasks/api/metrics` | Economy metrics |
-| `GET /tasks/api/activity` | Activity feed |
-| `GET /tasks/api/transactions` | Transaction log |
+| Endpoint                      | Description               |
+| ----------------------------- | ------------------------- |
+| `GET /health`                 | Health check              |
+| `GET /tools/discover`         | List available paid tools |
+| `GET /tasks`                  | List tasks                |
+| `POST /tasks`                 | Create bounty task        |
+| `POST /tasks/:id/accept`      | Agent accepts task        |
+| `POST /tasks/:id/submit`      | Agent submits result      |
+| `POST /tasks/:id/approve`     | Approve and pay agent     |
+| `GET /tasks/api/metrics`      | Economy metrics           |
+| `GET /tasks/api/activity`     | Activity feed             |
+| `GET /tasks/api/transactions` | Transaction log           |
+
+## GOAT Network Integration
+
+AgentEconomy is submitted as a builder application to the [GOAT Network Builder Grants Program](https://www.goat.network/). It already proves the core primitive GOAT's agent-payments stack is built for: an agent that both earns and spends real money through x402, with on-chain settlement.
+
+- **Live demo**: https://kite-agent-economy.vercel.app
+- **On-chain proof**: a real, confirmed Kite Testnet transaction from the attestation contract -- https://testnet.kitescan.ai/tx/0xdc4953f1f9e6eb2fd55165f7b20502f15e1ee7203e6d92705f9ae89e77dbd604
+
+**Current state**: x402 payments run through the Pieverse facilitator on Kite Testnet (see [Kite Chain Integration](#kite-chain-integration) above); every tool purchase and task-completion payout is settled and attested on-chain.
+
+**Next step for GOAT**: swap in GOAT's own x402 facilitator and add ERC-8004 identity so each agent carries a portable, verifiable on-chain identity across the tasks it completes and the tools it pays for -- turning this from "an agent economy on Kite" into a GOAT-native one.
 
 ## Hackathon Requirements
 
